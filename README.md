@@ -1,15 +1,32 @@
-# Bulk Image Studio
+# 🖼️ Bulk Image Studio
 
-本项目提供纯浏览器端的批量图片裁剪、缩放、重命名、水印与多格式导出能力，所有处理均在本地完成，不会上传图片。
+纯前端的批量图片裁剪、缩放、重命名、水印与多格式导出工具，**所有处理均在浏览器本地完成，离线可用，不上传任何数据**。
+
+
+## 目录
+- [功能特性](#功能特性)
+- [使用方法](#使用方法)
+- [快速开始](#快速开始)
+- [离线运行](#离线运行)
+- [导出与重命名](#导出与重命名)
+- [开发脚本](#开发脚本)
+- [技术栈](#技术栈)
+- [目录结构](#目录结构)
+- [常见问题](#常见问题)
 
 ## 功能特性
-- 拖拽/多选上传，支持 JPG/PNG/WebP/AVIF
-- 手动焦点裁剪（卡片内直接拖拽缩放），支持比例约束
-- 智能焦点裁剪（smartcrop，可选）
-- 高质量缩放（pica）
-- 边框与文字水印（可调颜色、字号、位置、透明度）
-- 重命名规则：`ORIGINAL-NAME`、`{width}`、`{height}`、序号占位 `xxx`
-- 导出：逐个下载、ZIP 打包下载、保存到本地文件夹（需支持 File System Access）
+- ✅ 批量上传：拖拽/多选，支持 JPG / PNG / WebP / AVIF
+- ✅ 裁剪与缩放：手动焦点裁剪、智能焦点裁剪（smartcrop）、高质量缩放（pica）
+- ✅ 样式与水印：边框、文字水印（颜色/字号/位置/透明度可调）
+- ✅ 重命名规则：`ORIGINAL-NAME`、`{width}`、`{height}`、序号占位 `xxx`
+- ✅ 导出方式：逐个下载、ZIP 打包、保存到本地文件夹（浏览器需支持 File System Access）
+- 🔒 隐私友好：全程本地处理，不触网
+
+## 使用方法
+1. 打开页面后上传图片（拖拽或点击选择）。  
+2. 设置尺寸、比例或裁剪方式（手动/智能），选择高质量缩放与否。  
+3. 配置边框、水印、重命名模式。  
+4. 处理并导出：逐个下载、ZIP 打包，或保存到本地文件夹（支持时）。  
 
 ## 快速开始
 ```bash
@@ -23,113 +40,38 @@ npm run build
 npm run preview
 ```
 
-## 主要脚本
+## 离线运行
+- 所有图像处理在浏览器内完成，不依赖任何在线接口。  
+- 首次需联网执行 `npm install` 安装依赖；之后可携带 `node_modules` 在无网环境直接 `npm run dev` / `npm run build`。  
+- 若目标环境完全无网，建议提前打包或缓存依赖随项目分发。  
+
+## 导出与重命名
+- 输出格式：保持原格式 / JPEG / WebP / AVIF（质量 1-100）。  
+- 文件名占位示例：`ORIGINAL-NAME_{width}x{height}_xxx` → `photo_512x512_001.jpg`。  
+- 保存到文件夹需浏览器支持 File System Access；若系统文件夹受限，可在该目录下新建子文件夹再保存。  
+
+## 开发脚本
 - `npm run dev`：本地开发（Vite）
 - `npm run build`：类型检查 + 生产构建
-- `npm run preview`：构建结果本地预览
+- `npm run preview`：本地预览构建产物
 - `npm run lint`：ESLint 检查
+
+## 技术栈
+- 前端：React 19 + TypeScript 5
+- 构建：Vite 7
+- UI：Tailwind CSS（@tailwindcss/postcss）
+- 图像处理：Canvas API + `pica`（高质量缩放）+ `smartcrop`（智能裁剪）+ `react-easy-crop`（手动裁剪）
+- 打包下载：`jszip`、`file-saver`
 
 ## 目录结构
 - `src/App.tsx`：页面与交互主入口
-- `src/components/InlineCropper.tsx`：内联手动裁剪组件
-- `src/components/UploadPanel.tsx`：上传/拖拽
-- `src/components/ResizeForm.tsx`：尺寸/比例/高级选项
+- `src/components/InlineCropper.tsx`：内联手动裁剪
+- `src/components/UploadPanel.tsx`：上传与拖拽
+- `src/components/ResizeForm.tsx`：尺寸、比例及高级选项
 - `src/components/ExportButton.tsx`：ZIP 打包下载
-- `src/utils/imageProcessor.ts`：裁剪、缩放、水印、格式转换、重命名管线
+- `src/utils/imageProcessor.ts`：裁剪/缩放/水印/重命名管线
 
-## 打包上传到 GitHub 的建议
-1. 确保 `npm run build` 通过（已在本地验证）。
-2. 保持 `.gitignore`，避免提交 `node_modules`、`dist`、日志等。
-3. 在 GitHub 新建仓库后执行：
-   ```bash
-   git init
-   git add .
-   git commit -m "init: bulk image studio"
-   git branch -M main
-   git remote add origin <your_repo_url>
-   git push -u origin main
-   ```
-
-## 依赖
-- React 19 / Vite 7 / TypeScript 5
-- `react-easy-crop`（手动裁剪）
-- `pica`（高质量缩放）
-- `smartcrop`（智能焦点裁剪）
-- `jszip`、`file-saver`（打包/下载）
-
-## 说明
-- 项目完全本地执行，无服务器端。
-- 若保存到文件夹功能在浏览器受限，请使用 ZIP 导出或逐个下载。
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 常见问题
+- **是否会将图片上传到服务器？** 不会，全部处理在浏览器本地完成。  
+- **浏览器不支持保存到文件夹怎么办？** 使用 ZIP 导出或逐个下载。  
+- **需要联网吗？** 除首次安装依赖外，运行与处理均不依赖网络。  
